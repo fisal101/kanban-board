@@ -1,0 +1,57 @@
+{
+  "columns": [
+    {
+      "id": "todo",
+      "title": "Todo",
+      "order": 0
+    },
+    {
+      "id": "in-progress",
+      "title": "In Progress",
+      "order": 1
+    },
+    {
+      "id": "done",
+      "title": "Done",
+      "order": 2
+    }
+  ],
+  "cards": [
+    {
+      "id": "sample-3",
+      "title": "Create the React UI",
+      "description": "Render columns, cards, forms, and drag interactions.",
+      "columnId": "done",
+      "order": 0,
+      "createdAt": "2026-06-26T00:00:00.000Z",
+      "updatedAt": "2026-06-26T00:00:00.000Z"
+    },
+    {
+      "id": "sample-2",
+      "title": "Build the API",
+      "description": "Expose CRUD and move endpoints backed by JSON storage.",
+      "columnId": "todo",
+      "order": 0,
+      "createdAt": "2026-06-26T00:00:00.000Z",
+      "updatedAt": "2026-06-25T19:33:42.455Z"
+    },
+    {
+      "id": "d47a5cd1-eb4b-4eb5-b74e-7ce85e94af07",
+      "title": "same",
+      "description": "",
+      "columnId": "todo",
+      "order": 1,
+      "createdAt": "2026-06-25T19:33:37.118Z",
+      "updatedAt": "2026-06-25T19:37:48.619Z"
+    },
+    {
+      "id": "sample-1",
+      "title": "Map the board workflow",
+      "description": "Sketch the first columns and card states for the project.",
+      "columnId": "todo",
+      "order": 2,
+      "createdAt": "2026-06-26T00:00:00.000Z",
+      "updatedAt": "2026-06-26T00:00:00.000Z"
+    }
+  ]
+}
