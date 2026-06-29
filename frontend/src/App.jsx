@@ -24,8 +24,23 @@ const emptyForm = {
   id: null,
   title: "",
   description: "",
+  priority: "medium",
   columnId: "todo"
 };
+
+const cardPriorities = [
+  { id: "low", label: "Low" },
+  { id: "medium", label: "Medium" },
+  { id: "high", label: "High" }
+];
+
+function getPriority(card) {
+  return cardPriorities.some((priority) => priority.id === card.priority) ? card.priority : "medium";
+}
+
+function getPriorityLabel(card) {
+  return cardPriorities.find((priority) => priority.id === getPriority(card))?.label || "Medium";
+}
 
 function groupCards(columns, cards) {
   const grouped = Object.fromEntries(columns.map((column) => [column.id, []]));
@@ -98,7 +113,12 @@ function Card({ card, onEdit, onDelete, dragging = false }) {
   return (
     <article className={`task-card ${dragging ? "is-dragging" : ""}`}>
       <div>
-        <h3>{card.title}</h3>
+        <div className="card-title-row">
+          <h3>{card.title}</h3>
+          <span className={`priority-badge priority-${getPriority(card)}`}>
+            {getPriorityLabel(card)}
+          </span>
+        </div>
         {card.description ? <p>{card.description}</p> : null}
       </div>
       <div className="card-actions">
@@ -217,6 +237,20 @@ function CardModal({ columns, form, saving, error, onChange, onSubmit, onClose }
         </label>
 
         <label>
+          Priority
+          <select
+            value={form.priority}
+            onChange={(event) => onChange({ ...form, priority: event.target.value })}
+          >
+            {cardPriorities.map((priority) => (
+              <option key={priority.id} value={priority.id}>
+                {priority.label}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label>
           Column
           <select
             value={form.columnId}
@@ -289,6 +323,7 @@ export default function App() {
       id: card.id,
       title: card.title,
       description: card.description || "",
+      priority: getPriority(card),
       columnId: card.columnId
     });
     setFormError("");
@@ -303,7 +338,8 @@ export default function App() {
       if (form.id) {
         await api.updateCard(form.id, {
           title: form.title,
-          description: form.description
+          description: form.description,
+          priority: form.priority
         });
 
         if (form.columnId !== board.cards.find((card) => card.id === form.id)?.columnId) {
@@ -316,6 +352,7 @@ export default function App() {
         await api.createCard({
           title: form.title,
           description: form.description,
+          priority: form.priority,
           columnId: form.columnId
         });
       }
