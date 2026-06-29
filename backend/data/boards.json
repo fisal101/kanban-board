@@ -21,6 +21,7 @@
       "id": "sample-3",
       "title": "Create the React UI",
       "description": "Render columns, cards, forms, and drag interactions.",
+      "priority": "low",
       "columnId": "done",
       "order": 0,
       "createdAt": "2026-06-26T00:00:00.000Z",
@@ -30,6 +31,7 @@
       "id": "sample-2",
       "title": "Build the API",
       "description": "Expose CRUD and move endpoints backed by JSON storage.",
+      "priority": "high",
       "columnId": "todo",
       "order": 0,
       "createdAt": "2026-06-26T00:00:00.000Z",
@@ -37,8 +39,9 @@
     },
     {
       "id": "d47a5cd1-eb4b-4eb5-b74e-7ce85e94af07",
-      "title": "same",
-      "description": "",
+      "title": "Validate PR checks",
+      "description": "Confirm CI checks, review approval, and merge rules all work as expected.",
+      "priority": "medium",
       "columnId": "todo",
       "order": 1,
       "createdAt": "2026-06-25T19:33:37.118Z",
@@ -48,10 +51,41 @@
       "id": "sample-1",
       "title": "Map the board workflow",
       "description": "Sketch the first columns and card states for the project.",
+      "priority": "medium",
       "columnId": "todo",
       "order": 2,
       "createdAt": "2026-06-26T00:00:00.000Z",
       "updatedAt": "2026-06-26T00:00:00.000Z"
+    },
+    {
+      "id": "sample-4",
+      "title": "Document production release steps",
+      "description": "Capture what changed, testing evidence, known issues, and rollback notes.",
+      "priority": "high",
+      "columnId": "todo",
+      "order": 3,
+      "createdAt": "2026-06-29T00:00:00.000Z",
+      "updatedAt": "2026-06-29T00:00:00.000Z"
+    },
+    {
+      "id": "sample-5",
+      "title": "Review card priority UX",
+      "description": "Check that priority badges are clear on desktop and mobile board layouts.",
+      "priority": "medium",
+      "columnId": "in-progress",
+      "order": 0,
+      "createdAt": "2026-06-29T00:00:00.000Z",
+      "updatedAt": "2026-06-29T00:00:00.000Z"
+    },
+    {
+      "id": "sample-6",
+      "title": "Prepare demo data",
+      "description": "Add realistic cards so the board is easier to evaluate during review.",
+      "priority": "low",
+      "columnId": "done",
+      "order": 1,
+      "createdAt": "2026-06-29T00:00:00.000Z",
+      "updatedAt": "2026-06-29T00:00:00.000Z"
     }
   ]
 }
