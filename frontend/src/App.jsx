@@ -295,6 +295,16 @@ export default function App() {
   );
 
   const groupedCards = useMemo(() => groupCards(board.columns, board.cards), [board]);
+  const boardStats = useMemo(() => {
+    const doneCount = groupedCards.done?.length || 0;
+    const totalCount = board.cards.length;
+
+    return [
+      { label: "Total cards", value: totalCount },
+      { label: "Active cards", value: Math.max(totalCount - doneCount, 0) },
+      { label: "Done", value: doneCount }
+    ];
+  }, [board.cards.length, groupedCards]);
 
   async function loadBoard() {
     setError("");
@@ -447,6 +457,15 @@ export default function App() {
           Add card
         </button>
       </header>
+
+      <section className="board-stats" aria-label="Board summary">
+        {boardStats.map((stat) => (
+          <div key={stat.label} className="stat-tile">
+            <span>{stat.label}</span>
+            <strong>{stat.value}</strong>
+          </div>
+        ))}
+      </section>
 
       {error ? (
         <div className="status-banner error">
