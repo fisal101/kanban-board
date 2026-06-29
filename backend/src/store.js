@@ -7,6 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const dataDir = path.join(__dirname, "..", "data");
 const dataFile = path.join(dataDir, "boards.json");
+const cardPriorities = ["low", "medium", "high"];
 
 const defaultBoard = {
   columns: [
@@ -19,6 +20,7 @@ const defaultBoard = {
       id: "sample-1",
       title: "Map the board workflow",
       description: "Sketch the first columns and card states for the project.",
+      priority: "medium",
       columnId: "todo",
       order: 0,
       createdAt: "2026-06-26T00:00:00.000Z",
@@ -28,6 +30,7 @@ const defaultBoard = {
       id: "sample-2",
       title: "Build the API",
       description: "Expose CRUD and move endpoints backed by JSON storage.",
+      priority: "high",
       columnId: "in-progress",
       order: 0,
       createdAt: "2026-06-26T00:00:00.000Z",
@@ -37,6 +40,7 @@ const defaultBoard = {
       id: "sample-3",
       title: "Create the React UI",
       description: "Render columns, cards, forms, and drag interactions.",
+      priority: "low",
       columnId: "done",
       order: 0,
       createdAt: "2026-06-26T00:00:00.000Z",
@@ -70,13 +74,18 @@ async function ensureDataFile() {
 function cloneBoard(board) {
   return {
     columns: [...board.columns].sort((a, b) => a.order - b.order),
-    cards: [...board.cards].sort((a, b) => {
-      if (a.columnId === b.columnId) {
-        return a.order - b.order;
-      }
+    cards: [...board.cards]
+      .map((card) => ({
+        ...card,
+        priority: normalizePriority(card.priority)
+      }))
+      .sort((a, b) => {
+        if (a.columnId === b.columnId) {
+          return a.order - b.order;
+        }
 
-      return a.columnId.localeCompare(b.columnId);
-    })
+        return a.columnId.localeCompare(b.columnId);
+      })
   };
 }
 
@@ -153,6 +162,11 @@ function cleanString(value) {
   return typeof value === "string" ? value.trim() : "";
 }
 
+function normalizePriority(value) {
+  const priority = cleanString(value).toLowerCase();
+  return cardPriorities.includes(priority) ? priority : "medium";
+}
+
 export async function getBoard() {
   const board = await readBoard();
   return cloneBoard(board);
@@ -162,6 +176,7 @@ export async function createCard(input) {
   return mutateBoard((board) => {
     const title = cleanString(input.title);
     const description = cleanString(input.description);
+    const priority = normalizePriority(input.priority);
     const columnId = cleanString(input.columnId) || "todo";
 
     if (!title) {
@@ -176,6 +191,7 @@ export async function createCard(input) {
       id: crypto.randomUUID(),
       title,
       description,
+      priority,
       columnId,
       order,
       createdAt: now,
@@ -193,6 +209,8 @@ export async function updateCard(id, input) {
     const nextTitle = input.title === undefined ? card.title : cleanString(input.title);
     const nextDescription =
       input.description === undefined ? card.description : cleanString(input.description);
+    const nextPriority =
+      input.priority === undefined ? normalizePriority(card.priority) : normalizePriority(input.priority);
 
     if (!nextTitle) {
       throw httpError(400, "Title is required");
@@ -200,6 +218,7 @@ export async function updateCard(id, input) {
 
     card.title = nextTitle;
     card.description = nextDescription;
+    card.priority = nextPriority;
     card.updatedAt = new Date().toISOString();
     return card;
   });
