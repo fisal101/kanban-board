@@ -156,7 +156,7 @@ function SortableCard({ card, onEdit, onDelete }) {
   );
 }
 
-function Column({ column, cards, onAddCard, onEditCard, onDeleteCard }) {
+function Column({ column, cards, isFiltered, onAddCard, onEditCard, onDeleteCard }) {
   const { setNodeRef, isOver } = useDroppable({
     id: column.id,
     data: { type: "column" }
@@ -184,7 +184,12 @@ function Column({ column, cards, onAddCard, onEditCard, onDeleteCard }) {
           {cards.map((card) => (
             <SortableCard key={card.id} card={card} onEdit={onEditCard} onDelete={onDeleteCard} />
           ))}
-          {cards.length === 0 ? (
+          {cards.length === 0 && isFiltered ? (
+            <div className="empty-column muted">
+              No cards match this filter
+            </div>
+          ) : null}
+          {cards.length === 0 && !isFiltered ? (
             <button className="empty-column" type="button" onClick={() => onAddCard(column.id)}>
               <CirclePlus size={18} />
               Add first card
@@ -288,13 +293,25 @@ export default function App() {
   const [formError, setFormError] = useState("");
   const [saving, setSaving] = useState(false);
   const [activeCard, setActiveCard] = useState(null);
+  const [priorityFilter, setPriorityFilter] = useState("all");
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
+  const visibleCards = useMemo(() => {
+    if (priorityFilter === "all") {
+      return board.cards;
+    }
+
+    return board.cards.filter((card) => getPriority(card) === priorityFilter);
+  }, [board.cards, priorityFilter]);
   const groupedCards = useMemo(() => groupCards(board.columns, board.cards), [board]);
+  const visibleGroupedCards = useMemo(
+    () => groupCards(board.columns, visibleCards),
+    [board.columns, visibleCards]
+  );
   const boardStats = useMemo(() => {
     const doneCount = groupedCards.done?.length || 0;
     const totalCount = board.cards.length;
@@ -302,9 +319,10 @@ export default function App() {
     return [
       { label: "Total cards", value: totalCount },
       { label: "Active cards", value: Math.max(totalCount - doneCount, 0) },
-      { label: "Done", value: doneCount }
+      { label: "Done", value: doneCount },
+      { label: "Visible now", value: visibleCards.length }
     ];
-  }, [board.cards.length, groupedCards]);
+  }, [board.cards.length, groupedCards, visibleCards.length]);
 
   async function loadBoard() {
     setError("");
@@ -467,6 +485,29 @@ export default function App() {
         ))}
       </section>
 
+      <section className="board-controls" aria-label="Board filters">
+        <span>Priority</span>
+        <div className="filter-segmented">
+          <button
+            className={priorityFilter === "all" ? "is-active" : ""}
+            type="button"
+            onClick={() => setPriorityFilter("all")}
+          >
+            All
+          </button>
+          {cardPriorities.map((priority) => (
+            <button
+              key={priority.id}
+              className={priorityFilter === priority.id ? "is-active" : ""}
+              type="button"
+              onClick={() => setPriorityFilter(priority.id)}
+            >
+              {priority.label}
+            </button>
+          ))}
+        </div>
+      </section>
+
       {error ? (
         <div className="status-banner error">
           <span>{error}</span>
@@ -495,7 +536,8 @@ export default function App() {
               <Column
                 key={column.id}
                 column={column}
-                cards={groupedCards[column.id] || []}
+                cards={visibleGroupedCards[column.id] || []}
+                isFiltered={priorityFilter !== "all"}
                 onAddCard={openNewCard}
                 onEditCard={openEditCard}
                 onDeleteCard={removeCard}

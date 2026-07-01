@@ -64,7 +64,7 @@ button {
 
 .board-stats {
   display: grid;
-  grid-template-columns: repeat(3, minmax(120px, 1fr));
+  grid-template-columns: repeat(4, minmax(120px, 1fr));
   gap: 12px;
   max-width: 1440px;
   margin: 0 auto 18px;
@@ -94,6 +94,47 @@ button {
   line-height: 1;
 }
 
+.board-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  max-width: 1440px;
+  margin: 0 auto 18px;
+  border: 1px solid #d8e0eb;
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #ffffff;
+}
+
+.board-controls > span {
+  color: #52627a;
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.filter-segmented {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.filter-segmented button {
+  min-height: 34px;
+  border: 1px solid #d8e0eb;
+  border-radius: 8px;
+  padding: 0 12px;
+  color: #344054;
+  background: #f8fafc;
+  font-weight: 800;
+}
+
+.filter-segmented button:hover,
+.filter-segmented button.is-active {
+  border-color: #1f7a5c;
+  color: #17684f;
+  background: #e5f4ee;
+}
 .primary-button,
 .text-button,
 .icon-button,
@@ -333,6 +374,16 @@ button {
   background: #ffffff;
 }
 
+.empty-column.muted {
+  cursor: default;
+  color: #667085;
+}
+
+.empty-column.muted:hover {
+  border-color: #aab7c9;
+  color: #667085;
+  background: rgba(255, 255, 255, 0.62);
+}
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -424,7 +475,12 @@ button {
   }
 
   .board-stats {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+  }
+
+  .board-controls {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .board-column {
