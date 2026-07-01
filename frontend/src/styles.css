@@ -94,47 +94,6 @@ button {
   line-height: 1;
 }
 
-.board-controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  max-width: 1440px;
-  margin: 0 auto 18px;
-  border: 1px solid #d8e0eb;
-  border-radius: 8px;
-  padding: 10px 12px;
-  background: #ffffff;
-}
-
-.board-controls > span {
-  color: #52627a;
-  font-size: 0.88rem;
-  font-weight: 800;
-}
-
-.filter-segmented {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.filter-segmented button {
-  min-height: 34px;
-  border: 1px solid #d8e0eb;
-  border-radius: 8px;
-  padding: 0 12px;
-  color: #344054;
-  background: #f8fafc;
-  font-weight: 800;
-}
-
-.filter-segmented button:hover,
-.filter-segmented button.is-active {
-  border-color: #1f7a5c;
-  color: #17684f;
-  background: #e5f4ee;
-}
 .primary-button,
 .text-button,
 .icon-button,

@@ -319,10 +319,9 @@ export default function App() {
     return [
       { label: "Total cards", value: totalCount },
       { label: "Active cards", value: Math.max(totalCount - doneCount, 0) },
-      { label: "Done", value: doneCount },
-      { label: "Visible now", value: visibleCards.length }
+      { label: "Done", value: doneCount }
     ];
-  }, [board.cards.length, groupedCards, visibleCards.length]);
+  }, [board.cards.length, groupedCards]);
 
   async function loadBoard() {
     setError("");
@@ -483,29 +482,6 @@ export default function App() {
             <strong>{stat.value}</strong>
           </div>
         ))}
-      </section>
-
-      <section className="board-controls" aria-label="Board filters">
-        <span>Priority</span>
-        <div className="filter-segmented">
-          <button
-            className={priorityFilter === "all" ? "is-active" : ""}
-            type="button"
-            onClick={() => setPriorityFilter("all")}
-          >
-            All
-          </button>
-          {cardPriorities.map((priority) => (
-            <button
-              key={priority.id}
-              className={priorityFilter === priority.id ? "is-active" : ""}
-              type="button"
-              onClick={() => setPriorityFilter(priority.id)}
-            >
-              {priority.label}
-            </button>
-          ))}
-        </div>
       </section>
 
       {error ? (
